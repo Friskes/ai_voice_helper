@@ -1,0 +1,24 @@
+body {
+    margin: 0%;
+    background: #1e1e1e;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.visualizer-container {
+    margin: 0%;
+    background: #1e1e1e;;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.visual-line{
+    margin: 2px;
+    border-radius: 30px;
+}

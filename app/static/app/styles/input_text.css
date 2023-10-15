@@ -1,0 +1,9 @@
+.input-text {
+    position: absolute;
+    max-width: 50%;
+    top: 70%;
+    color: white;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 22px;
+    /* text-align: center; */
+}

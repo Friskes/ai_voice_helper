@@ -1,0 +1,29 @@
+.loader-anim {
+    display: none;
+    /* размер загрузчика */
+    width: 200px;
+    height: 200px;
+    /* border: 5px solid #1e1e1e; */
+    padding: 0 8px;
+    box-sizing: border-box;
+    background: linear-gradient(#fff 0 0) 0    0/15px 40px,
+      linear-gradient(#fff 0 0) 100% 0/15px 40px,
+      radial-gradient(farthest-side,#fff 90%,#1e1e1e) 0 5px/15px 15px content-box,
+      #1e1e1e;
+    background-repeat: no-repeat;
+    animation: l3 3s infinite linear;
+}
+
+@keyframes l3 {
+    25% {
+        background-position: 0 0   ,100% 100%,100% calc(100% - 5px)
+    }
+
+    50% {
+        background-position: 0 100%,100% 100%,0    calc(100% - 5px)
+    }
+
+    75% {
+        background-position: 0 100%,100%    0,100% 5px
+    }
+}

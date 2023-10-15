@@ -1,0 +1,55 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ru">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <title>Assistant</title>
+
+    <link rel="stylesheet" href="{% static 'app/styles/ask_btn.css' %}">
+    <link rel="stylesheet" href="{% static 'app/styles/skip_btn.css' %}">
+    <link rel="stylesheet" href="{% static 'app/styles/visualizer.css' %}">
+    <link rel="stylesheet" href="{% static 'app/styles/loader_anim.css' %}">
+    <link rel="stylesheet" href="{% static 'app/styles/input_text.css' %}">
+  </head>
+
+  <body>
+    <div class="visualizer-container"></div>
+
+    <button data-text="Awesome" class="ask-btn">
+      <span class="ask-btn-actual-text">&nbsp;Ask&nbsp;me&nbsp;</span>
+      <span class="ask-btn-hover-text" aria-hidden="true">&nbsp;Ask&nbsp;me&nbsp;</span>
+    </button>
+
+    <button type="button" class="cube-btn cube cube-hover">
+      <div class="cube-bg-top">
+      <div class="cube-bg-inner"></div>
+      </div>
+      <div class="cube-bg-right">
+      <div class="cube-bg-inner"></div>
+      </div>
+      <div class="cube-bg">
+      <div class="cube-bg-inner"></div>
+      </div>
+      <div class="cube-text">Skip Answer</div>
+    </button>
+
+    <div class="loader-anim"></div>
+
+    <div class="input-text"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/2.2.1/js.cookie.min.js" 
+    integrity="sha512-Meww2sXqNHxI1+5Dyh/9KAtvI9RZSA4c1K2k5iL02oiPO/RH3Q30L3M1albtqMg50u4gRTYdV4EXOQqXEI336A==" 
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/RecordRTC/5.6.2/RecordRTC.min.js" 
+    integrity="sha512-IMLquIKoKQeQ+kYuec3BvLYjy3yF2nH/ojHPkXQnQTeGKRliZcVed19I6E0t+WBt+9uPuEba0t2iyZAVP8mdlw==" 
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="{% static 'app/javascript/visualize_voice.js' %}"></script>
+    <script src="{% static 'app/javascript/main.js' %}"></script>
+  </body>
+
+</html>

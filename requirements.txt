@@ -1,0 +1,7 @@
+django
+ipython
+torch
+gTTS
+scikit-learn
+vosk
+g4f
