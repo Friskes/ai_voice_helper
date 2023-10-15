@@ -16,6 +16,7 @@ from app.services.gpt import get_gpt_answer
 
 
 vosk.SetLogLevel(-1) # отключить лог воска
+# https://alphacephei.com/vosk/models
 model_ru = vosk.Model('app/static/app/models/vosk_small/ru')
 
 # Обучаем матрицу ИИ на DATA_SET модели для распознавания команд ассистентом
@@ -25,8 +26,8 @@ vectors = vectorizer.fit_transform(list(DATA_SET.keys()))
 clf = LogisticRegression()
 clf.fit(vectors, list(DATA_SET.values()))
 
-# Коэффициент порога совпадения
-threshold = 0.2
+# Коэффициент порога совпадения (необходимо подстраивать под наполнение дата сета)
+threshold = 0.55
 
 not_understand_answers = (
     'Я не поняла',
@@ -50,6 +51,7 @@ def is_builtin_cmd(text: str) -> str | None:
 
     # Поиск наибольшей вероятности
     max_probability = max(predicted_probabilities[0])
+    print('max_probability:', max_probability)
 
     data_set_val = clf.classes_[predicted_probabilities[0].argmax()]
 

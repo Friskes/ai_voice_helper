@@ -6,7 +6,7 @@ def pi():
     print('def pi')
 
 
-def seven():
+def thinking():
     print('def seven')
 
 

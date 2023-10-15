@@ -1,21 +1,24 @@
 from __future__ import annotations
 
-from string import punctuation
-
 # https://github.com/xtekky/gpt4free
 import g4f
 g4f.logging = True # Отобразить какой провайдер используется
 g4f.check_version = False # Отключить проверку версии при импорте
 
+from string import punctuation
+
+
+other_symbols = r'²½０１２３４５６７８９'
 
 table = str.maketrans({
-    sym: '' for sym in punctuation
+    sym: '' for sym in punctuation + other_symbols
     # '`': '',
     # '(': '',
     # ')': ' ',
     # '@': 'at ',
     # '_': ' '
 })
+
 
 def clear_text(text: str) -> str:
     """Матрица замены символов в тексте для корректной озвучки"""
@@ -61,7 +64,9 @@ def get_gpt_answer(question: str) -> tuple[str, str]:
             # provider=g4f.Provider.Aichat
         )
         # обработка ответа (проверка на наличие кода и очистка перед озвучкой)
+        # print('\nBEFORE: ', answer, end='\n\n')
         answer, code = check_answer(answer)
+        # print('AFTER: ', answer, end='\n\n')
 
     except Exception as exc:
         print('def get_gpt_answer:', exc)
