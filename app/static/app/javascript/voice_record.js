@@ -30,6 +30,9 @@ const successCallback = (stream) => {
     const speech_recognition = new SpeechRecognition();
     speech_recognition.continuous = true; // необходимо для работы ивента onresult
     speech_recognition.interimResults = true; // выдавать отрывки текста в onresult на протяжении всей записи
+    speech_recognition.maxAlternatives = 1;
+    const user_lang = navigator.language || navigator.userLanguage;
+    speech_recognition.lang = user_lang === 'ru' ? 'ru-RU' : 'en-US';
 
     // MIME types and CODECS
     // const mime_type = 'audio/x-wav';
@@ -44,7 +47,7 @@ const successCallback = (stream) => {
         disableLogs: true,
         type: 'audio',
         mimeType: mime_type,
-        desiredSampRate: 44100,
+        desiredSampRate: 48000,
         timeSlice: 1000,
         bufferSize: 16384,
         bitsPerSecond: 128000,
@@ -66,9 +69,24 @@ const successCallback = (stream) => {
     // audio.loop = true; // зациклить аудио дорожку
     // audio.volume = 0.3; // громкость аудио
 
+    let timeout_id;
+
+
+    const set_timeout = (timeout=3000) => {
+        if (timeout_id) clearTimeout(timeout_id);
+
+        timeout_id = setTimeout(() => {
+            speech_recognition.dispatchEvent(new Event('speechend'));
+        }, timeout);
+
+        return timeout_id;
+    };
+
 
     ask_button.addEventListener('click', (event) => {
         // при клике по кнопке, скрываем кнопку и показываем визуализацию голоса
+
+        set_timeout();
 
         ask_button.style.display = 'none';
 
@@ -116,19 +134,21 @@ const successCallback = (stream) => {
         // console.log('STOP RECORDING', voice_blob);
         record_rtc.reset(); // необходимо для возможности повторного запуска записи в будущем
 
-        const file_date = new Date().toISOString();
+        const dt_arr = new Date().toISOString().split('T');
+        const date_time = dt_arr[0] + '-' + dt_arr[1].split('.')[0].replace(':', '-').replace(':', '-');
 
         const form_data = new FormData();
-        form_data.append('audio_data', voice_blob, `name_${file_date}.wav`);
+        form_data.append('audio_data', voice_blob, `${date_time}.wav`);
 
         // console.log('SEND DATA TO SERVER', form_data);
+
+        let headers = new Headers();
+        headers.append('X-CSRFToken', Cookies.get('csrftoken'));
 
         fetch('/', {
             method: 'POST',
             body: form_data,
-            headers: {
-                'X-CSRFToken': Cookies.get('csrftoken')
-            }
+            headers: headers
         })
         .then(response => response.blob()).then((voice_blob) => {
             // console.log('GET DATA FROM SERVER', voice_blob);
@@ -139,7 +159,7 @@ const successCallback = (stream) => {
             skip_button.style.display = 'block';
 
             audio.src = blob_url;
-            audio.play().catch(error => { console.error('audio.play:', JSON.stringify(error)); });
+            audio.play().catch(error => { console.error('audio play error:', JSON.stringify(error)); });
         });
     };
 
@@ -163,19 +183,24 @@ const successCallback = (stream) => {
 
 
     speech_recognition.onspeechend = (event) => {
+        // console.log('onspeechend:', event);
 
-        visualizer_container.style.display = 'none';
-        loader.style.display = 'block';
-
+        if (timeout_id) clearTimeout(timeout_id);
+        timeout_id = null;
         speech_recognition.stop();
-        record_rtc.stopRecording(process_audio);
 
-        // stream.getAudioTracks().forEach(track => track.stop());
+        if (event.isTrusted) {
+            visualizer_container.style.display = 'none';
+            loader.style.display = 'block';
+            record_rtc.stopRecording(process_audio);
+        };
     };
 
 
     speech_recognition.onresult = (event) => {
         // console.log('onresult:', event.results[0][0].transcript);
+
+        set_timeout();
 
         input_text.textContent = event.results[0][0].transcript;
     };
@@ -199,7 +224,7 @@ navigator.mediaDevices.getUserMedia({
         echoCancellation: false,
         latency: 0,
         noiseSuppression: false,
-        sampleRate: 44100,
+        sampleRate: 48000,
         sampleSize: 16,
         volume: 1.0
     },

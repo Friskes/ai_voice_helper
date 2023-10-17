@@ -2,7 +2,7 @@ from django.urls import path
 from django.views.generic import RedirectView
 from django.contrib.staticfiles.storage import staticfiles_storage
 
-from app.views import AssistantView
+from app.views import AiVoiceHelperView
 
 
 urlpatterns = [
@@ -11,5 +11,5 @@ urlpatterns = [
         name='favicon'
     ),
 
-    path('', AssistantView.as_view(), name='assistant')
+    path('', AiVoiceHelperView.as_view(), name='ai_voice_helper')
 ]

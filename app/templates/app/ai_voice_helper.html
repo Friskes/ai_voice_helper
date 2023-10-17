@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    <title>Assistant</title>
+    <title>AI Helper</title>
 
     <link rel="stylesheet" href="{% static 'app/styles/ask_btn.css' %}">
     <link rel="stylesheet" href="{% static 'app/styles/skip_btn.css' %}">
@@ -18,6 +18,8 @@
   </head>
 
   <body>
+    {% csrf_token %}
+
     <div class="visualizer-container"></div>
 
     <button data-text="Awesome" class="ask-btn">
@@ -49,7 +51,7 @@
     integrity="sha512-IMLquIKoKQeQ+kYuec3BvLYjy3yF2nH/ojHPkXQnQTeGKRliZcVed19I6E0t+WBt+9uPuEba0t2iyZAVP8mdlw==" 
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="{% static 'app/javascript/visualize_voice.js' %}"></script>
-    <script src="{% static 'app/javascript/main.js' %}"></script>
+    <script src="{% static 'app/javascript/voice_record.js' %}"></script>
   </body>
 
 </html>

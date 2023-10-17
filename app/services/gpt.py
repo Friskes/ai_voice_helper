@@ -20,10 +20,12 @@ table = str.maketrans({
 })
 
 
-def clear_text(text: str) -> str:
+
+def clear_text(answer: str) -> str:
     """Матрица замены символов в тексте для корректной озвучки"""
 
-    return text.translate(table)
+    return answer.translate(table)
+
 
 
 def check_answer(answer: str) -> tuple[str, str]:
@@ -51,7 +53,8 @@ def check_answer(answer: str) -> tuple[str, str]:
     return text, code
 
 
-def get_gpt_answer(question: str) -> tuple[str, str]:
+
+def get_gpt_answer(request_text: str) -> tuple[str, str]:
     """Получить ответ на вопрос от GPT"""
 
     try:
@@ -59,7 +62,7 @@ def get_gpt_answer(question: str) -> tuple[str, str]:
             model="gpt-3.5-turbo",
             messages=[{
                 "role": "user",
-                "content": question
+                "content": request_text
             }],
             # provider=g4f.Provider.Aichat
         )

@@ -19,35 +19,43 @@ model_en = torch.package.PackageImporter(
 model_ru.to(device)
 model_en.to(device)
 
-speaker_ru = 'kseniya' # aidar, baya, kseniya, xenia, eugene
-speaker_en = 'en_0' # от 0 до 117 номера разных спикеров
+silero_models = {'ru': model_ru, 'en': model_en}
+
+speakers = {
+    'ru': 'kseniya', # aidar, baya, kseniya, xenia, eugene
+    'en': 'en_0' # от 0 до 117 номера разных спикеров
+}
 
 sample_rate = 48000
 filename = 'ai_voice_helper.wav'
 
 
-def get_audio_data_silero(text: str, language: str='ru') -> bytes:
-    """Озвучка текста моделью silero"""
 
-    # может работать только с одним языком одиновременно (не поддерживает смешивания)
-    if language == 'ru':
-        audio = model_ru.apply_tts(text=text, speaker=speaker_ru, sample_rate=sample_rate)
-    elif language == 'en':
-        audio = model_en.apply_tts(text=text, speaker=speaker_en, sample_rate=sample_rate)
+def get_audio_data_silero(text: str, lang_code: str='ru') -> bytes:
+    """Озвучка текста моделью silero\n
+    Может работать только с одним языком одиновременно (не поддерживает смешивание)"""
 
-    file = Audio(audio, rate=sample_rate)
+    numpy_arr = silero_models[lang_code].apply_tts(
+        text=text,
+        speaker=speakers[lang_code],
+        sample_rate=sample_rate
+    )
+
+    file = Audio(numpy_arr, rate=sample_rate)
     file.filename = filename
 
     return file.data
 
 
-def get_audio_data_gtts(text: str, language: str='ru') -> bytes:
-    """Озвучка текста моделью gtts"""
+
+def get_audio_data_gtts(text: str, lang_code: str='ru') -> bytes:
+    """Озвучка текста моделью gtts\n
+    Поддерживает смесь языков в тексте"""
 
     with BytesIO() as file:
 
         try:
-            gtts.gTTS(text, lang=language).write_to_fp(file)
+            gtts.gTTS(text, lang=lang_code).write_to_fp(file)
         except gtts.tts.gTTSError as exc:
             print('def get_audio_data_gtts:', exc)
             return b''

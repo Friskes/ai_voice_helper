@@ -15,11 +15,27 @@ __pycache__/
 static
 !**/app/static
 
-**/silero_models/en/**
-!**/silero_models/en/.gitkeep
-
 **/silero_models/ru/**
 !**/silero_models/ru/.gitkeep
 
+**/silero_models/en/**
+!**/silero_models/en/.gitkeep
+
 **/vosk_small/ru/**
 !**/vosk_small/ru/.gitkeep
+
+**/vosk_small/en/**
+!**/vosk_small/en/.gitkeep
+
+**/vosk_large/ru/**
+!**/vosk_large/ru/.gitkeep
+
+**/vosk_large/en/**
+!**/vosk_large/en/.gitkeep
+
+**/lang-id-voxlingua107-ecapa/**
+!**/lang-id-voxlingua107-ecapa/hyperparams.yaml
+
+audio_cache
+
+.env
