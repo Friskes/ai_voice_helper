@@ -14,12 +14,12 @@ class TestAssistantView(TestCase):
     def setUpTestData(cls):
 
         file_names = (
-            # 'ru_nums_test.wav',
-            # 'ru_text_test.wav',
+            'ru_nums_test.wav',
+            'ru_text_test.wav',
             'ru_five_years_test.wav',
 
-            # 'en_nums_test.wav',
-            # 'en_text_test.wav',
+            'en_nums_test.wav',
+            'en_text_test.wav',
             'en_five_years_test.wav',
         )
 
