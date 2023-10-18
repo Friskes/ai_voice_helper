@@ -1,10 +1,13 @@
+from time import sleep
+from io import BytesIO
+
 from django.test import TestCase
 from django.urls import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
 
 import soundfile
 import sounddevice
-from io import BytesIO
+
 
 
 # python manage.py test app.tests.test_views.TestAssistantView
@@ -54,4 +57,8 @@ class TestAssistantView(TestCase):
             file.write(response.content)
             file.seek(0)
             numpy_arr, sample_rate = soundfile.read(file)
-            sounddevice.play(numpy_arr, sample_rate, blocking=True)
+            sounddevice.play(numpy_arr, sample_rate)
+
+            # Принудительно останавливаю аудиозапись чтобы не затягивать тест
+            sleep(3)
+            sounddevice.stop()

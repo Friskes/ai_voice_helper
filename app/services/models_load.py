@@ -2,6 +2,7 @@ import os
 
 from torch import device, set_num_threads
 from torch.package import PackageImporter
+from torch.hub import download_url_to_file
 
 from dotenv import load_dotenv, find_dotenv
 load_dotenv(find_dotenv())
@@ -56,7 +57,7 @@ model_en = Model(vosk_models_path + 'en')
 
 vosk_models = {'ru': model_ru, 'en': model_en}
 
-# Обучаем матрицу ИИ на DATA_SET модели для распознавания команд ассистентом
+# Обучаем матрицу ИИ на DATA_SET модели для распознавания команд
 ru_vectorizer = CountVectorizer()
 ru_vectors = ru_vectorizer.fit_transform(list(RU_DATA_SET.keys()))
 
@@ -73,6 +74,20 @@ vectorizers = {'ru': ru_vectorizer, 'en': en_vectorizer}
 regressions = {'ru': ru_regression, 'en': en_regression}
 
 
+
+silero_models_path = 'app/static/app/models/silero_models/'
+
+if not os.path.exists(silero_models_path + 'ru/v3_1_ru.pt'):
+    download_url_to_file(
+        'https://models.silero.ai/models/tts/ru/v3_1_ru.pt',
+        silero_models_path + 'ru/v3_1_ru.pt'
+    )
+
+if not os.path.exists(silero_models_path + 'en/v3_en.pt'):
+    download_url_to_file(
+        'https://models.silero.ai/models/tts/en/v3_en.pt',
+        silero_models_path + 'en/v3_en.pt'
+    )
 
 cpu_device = device('cpu')
 set_num_threads(4)
