@@ -36,6 +36,9 @@ static
 **/lang-id-voxlingua107-ecapa/**
 !**/lang-id-voxlingua107-ecapa/hyperparams.yaml
 
+**/lang-id-commonlanguage_ecapa/**
+!**/lang-id-commonlanguage_ecapa/hyperparams.yaml
+
 audio_cache
 
 .env

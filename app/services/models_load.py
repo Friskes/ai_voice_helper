@@ -22,10 +22,11 @@ from app.services.utils import download_and_unpack_zip_to_folder
 
 
 # https://huggingface.co/speechbrain/lang-id-voxlingua107-ecapa
+# https://huggingface.co/speechbrain/lang-id-commonlanguage_ecapa
 # https://bark.phon.ioc.ee/voxlingua107/
 classifier = EncoderClassifier.from_hparams(
-    source='app/static/app/models/lang-id-voxlingua107-ecapa',
-    savedir='app/static/app/models/lang-id-voxlingua107-ecapa'
+    source='app/static/app/models/lang-id-commonlanguage_ecapa',
+    savedir='app/static/app/models/lang-id-commonlanguage_ecapa'
 )
 classifier.hparams.label_encoder.ignore_len()
 

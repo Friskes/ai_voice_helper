@@ -83,12 +83,11 @@ def recognize_lang_from_audio_file(audio_file_obj: InMemoryUploadedFile) -> str:
     signal, sample_rate = torchaudio.load(bytes_io)
     print('sample_rate:', sample_rate)
 
-    embeddings = classifier.encode_batch(signal)
-
     out_prob, score, index, text_lab = classifier.classify_batch(signal)
     print('text_lab:', text_lab)
 
-    lang_code, lang_name = text_lab[0].split(': ')
+    lang_name = text_lab[0].split(': ')[-1]
+    lang_code = lang_name[:2].lower()
     print(f'Скорее всего это язык: {lang_name} с шансом: {score.exp()[0] :.0%}')
 
     allowed_lang_codes = ['ru', 'en']
