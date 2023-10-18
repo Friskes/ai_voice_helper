@@ -1,30 +1,41 @@
 from __future__ import annotations
+from string import punctuation
 
 # https://github.com/xtekky/gpt4free
 import g4f
 g4f.logging = True # Отобразить какой провайдер используется
 g4f.check_version = False # Отключить проверку версии при импорте
 
-from string import punctuation
 
 
-other_symbols = r'²½０１２３４５６７８９'
-
-table = str.maketrans({
-    sym: '' for sym in punctuation + other_symbols
-    # '`': '',
-    # '(': '',
-    # ')': ' ',
-    # '@': 'at ',
-    # '_': ' '
-})
+sym_replace_table = {
+    '²': '2',
+    '½': '1/2',
+    '０': '0',
+    '１': '1',
+    '２': '2',
+    '３': '3',
+    '４': '4',
+    '５': '5',
+    '６': '6',
+    '７': '7',
+    '８': '8',
+    '９': '9',
+    ' ': ' ',
+    '–': '-',
+    '—': '-',
+    '«': '',
+    '»': ''
+}
+# sym_replace_table.update({sym: '' for sym in punctuation})
+trans_table = str.maketrans(sym_replace_table)
 
 
 
 def clear_text(answer: str) -> str:
     """Матрица замены символов в тексте для корректной озвучки"""
 
-    return answer.translate(table)
+    return answer.translate(trans_table)
 
 
 

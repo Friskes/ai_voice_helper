@@ -1,86 +1,22 @@
 from __future__ import annotations
 
+import wave
+import json
+import random
+from io import BytesIO
+
 from django.core.files.uploadedfile import InMemoryUploadedFile
 
-from sklearn.feature_extraction.text import CountVectorizer
-from sklearn.linear_model import LogisticRegression
-import vosk
-import wave
-from json import loads
-import random
-import os
-import librosa
-from io import BytesIO
+from vosk import KaldiRecognizer
 from scipy.io import wavfile
-
-from dotenv import load_dotenv, find_dotenv
-load_dotenv(find_dotenv())
-
 import torchaudio
-from speechbrain.pretrained import EncoderClassifier
-print('Не беспокойтесь, предупреждения выше ни на что не влияют.')
+import librosa
 
 from app.services import commands # необходимо для запуска функций из модуля через exec
-from app.services.words import RU_DATA_SET, EN_DATA_SET, NOT_UNDERSTAND_ANSWERS
+from app.services.words import NOT_UNDERSTAND_ANSWERS
 from app.services.voices import get_audio_data_silero, get_audio_data_gtts
 from app.services.gpt import get_gpt_answer
-from app.services.utils import download_and_unpack_zip_to_folder
-
-
-# https://huggingface.co/speechbrain/lang-id-voxlingua107-ecapa
-# https://bark.phon.ioc.ee/voxlingua107/
-classifier = EncoderClassifier.from_hparams(
-    source='app/static/app/models/lang-id-voxlingua107-ecapa',
-    savedir='app/static/app/models/lang-id-voxlingua107-ecapa'
-)
-classifier.hparams.label_encoder.ignore_len()
-
-
-vosk.SetLogLevel(-1) # отключить лог воска
-
-if os.environ.get('PERMANENT_USE_SMALL_MODEL'):
-    vosk_models_path = 'app/static/app/models/vosk_small/'
-else:
-    vosk_models_path = 'app/static/app/models/vosk_large/'
-
-if not os.path.exists(vosk_models_path + 'ru/am') or not os.path.exists(vosk_models_path + 'en/am'):
-    vosk_models_path = 'app/static/app/models/vosk_small/'
-
-if not os.path.exists(vosk_models_path + 'ru/am'):
-    download_and_unpack_zip_to_folder(
-        'https://alphacephei.com/vosk/models/vosk-model-small-ru-0.22.zip',
-        vosk_models_path,
-        'ru'
-    )
-
-if not os.path.exists(vosk_models_path + 'en/am'):
-    download_and_unpack_zip_to_folder(
-        'https://alphacephei.com/vosk/models/vosk-model-small-en-us-0.15.zip',
-        vosk_models_path,
-        'en'
-    )
-
-# https://alphacephei.com/vosk/models
-model_ru = vosk.Model(vosk_models_path + 'ru')
-model_en = vosk.Model(vosk_models_path + 'en')
-
-vosk_models = {'ru': model_ru, 'en': model_en}
-
-# Обучаем матрицу ИИ на DATA_SET модели для распознавания команд ассистентом
-ru_vectorizer = CountVectorizer()
-ru_vectors = ru_vectorizer.fit_transform(list(RU_DATA_SET.keys()))
-
-ru_regression = LogisticRegression()
-ru_regression.fit(ru_vectors, list(RU_DATA_SET.values()))
-
-en_vectorizer = CountVectorizer()
-en_vectors = en_vectorizer.fit_transform(list(EN_DATA_SET.keys()))
-
-en_regression = LogisticRegression()
-en_regression.fit(en_vectors, list(EN_DATA_SET.values()))
-
-vectorizers = {'ru': ru_vectorizer, 'en': en_vectorizer}
-regressions = {'ru': ru_regression, 'en': en_regression}
+from app.services.models_load import vectorizers, regressions, classifier, vosk_models
 
 
 
@@ -181,7 +117,7 @@ def recognize_text_from_audio_file(audio_file_obj: InMemoryUploadedFile) -> byte
     lang_code = recognize_lang_from_audio_file(audio_file_obj)
     audio_file_obj.seek(0)
 
-    recognizer = vosk.KaldiRecognizer(
+    recognizer = KaldiRecognizer(
         vosk_models[lang_code],
         wave_audio_file_obj.getframerate()
     )
@@ -194,7 +130,7 @@ def recognize_text_from_audio_file(audio_file_obj: InMemoryUploadedFile) -> byte
             break
 
         if recognizer.AcceptWaveform(data):
-            result = loads(recognizer.Result())
+            result = json.loads(recognizer.Result())
             # print('result:', result)
 
             return branching_logic(result['alternatives'][0]['text'], lang_code)

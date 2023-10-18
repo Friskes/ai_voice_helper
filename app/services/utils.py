@@ -1,6 +1,8 @@
-import urllib.request
 from io import BytesIO
 from zipfile import ZipFile
+
+from urllib.request import urlopen
+
 
 
 def download_and_unpack_zip_to_folder(
@@ -11,7 +13,7 @@ def download_and_unpack_zip_to_folder(
 
     print(f'Начинаю загрузку архива: {folder_name_with_ext}')
 
-    response = urllib.request.urlopen(url)
+    response = urlopen(url)
 
     buffer = BytesIO(response.read())
     with ZipFile(buffer) as file:
