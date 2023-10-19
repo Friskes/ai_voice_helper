@@ -15,10 +15,18 @@
     <link rel="stylesheet" href="{% static 'app/styles/visualizer.css' %}">
     <link rel="stylesheet" href="{% static 'app/styles/loader_anim.css' %}">
     <link rel="stylesheet" href="{% static 'app/styles/input_text.css' %}">
+    <link rel="stylesheet" href="{% static 'app/styles/commands.css' %}">
   </head>
 
   <body>
     {% csrf_token %}
+
+    <div class="embedded-commands">Embedded Commands:
+      {% for command in embedded_commands %}
+        <br>
+        {{ forloop.counter }}) {{ command }}
+      {% endfor %}
+    </div>
 
     <div class="visualizer-container"></div>
 

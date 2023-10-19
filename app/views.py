@@ -3,11 +3,25 @@ from django.http import HttpResponse
 from django.core.handlers.asgi import ASGIRequest
 
 from app.services.recognition import recognize_text_from_audio_file
+from app.services.words import RU_DATA_SET, EN_DATA_SET
+
 
 
 class AiVoiceHelperView(TemplateView):
 
     template_name = 'app/ai_voice_helper.html'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        lang_code = self.request.META.get('LANG').split('.')[0][:2]
+
+        if lang_code == 'ru':
+            context.update({'embedded_commands': RU_DATA_SET.keys()})
+        elif lang_code == 'en':
+            context.update({'embedded_commands': EN_DATA_SET.keys()})
+
+        return context
 
     def post(self, request: ASGIRequest, *args, **kwargs):
 

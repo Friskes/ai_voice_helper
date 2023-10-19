@@ -22,13 +22,21 @@ from app.services.utils import download_and_unpack_zip_to_folder
 
 
 # https://huggingface.co/speechbrain/lang-id-voxlingua107-ecapa
-# https://huggingface.co/speechbrain/lang-id-commonlanguage_ecapa
 # https://bark.phon.ioc.ee/voxlingua107/
-classifier = EncoderClassifier.from_hparams(
+voxlingua107_classifier = EncoderClassifier.from_hparams(
+    source='app/static/app/models/lang-id-voxlingua107-ecapa',
+    savedir='app/static/app/models/lang-id-voxlingua107-ecapa'
+)
+voxlingua107_classifier.hparams.label_encoder.ignore_len()
+
+# https://huggingface.co/speechbrain/lang-id-commonlanguage_ecapa
+commonlanguage_classifier = EncoderClassifier.from_hparams(
     source='app/static/app/models/lang-id-commonlanguage_ecapa',
     savedir='app/static/app/models/lang-id-commonlanguage_ecapa'
 )
-classifier.hparams.label_encoder.ignore_len()
+commonlanguage_classifier.hparams.label_encoder.ignore_len()
+
+classifiers = {'voxlingua107': voxlingua107_classifier, 'commonlanguage': commonlanguage_classifier}
 
 if os.environ.get('PERMANENT_USE_SMALL_MODEL'):
     vosk_models_path = 'app/static/app/models/vosk_small/'

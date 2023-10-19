@@ -1,0 +1,11 @@
+.embedded-commands {
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin-left: 4%;
+    margin-top: 4%;
+    max-width: 35%;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 21px;
+    color: white;
+}

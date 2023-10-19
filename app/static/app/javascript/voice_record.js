@@ -32,7 +32,7 @@ const successCallback = (stream) => {
     speech_recognition.interimResults = true; // выдавать отрывки текста в onresult на протяжении всей записи
     speech_recognition.maxAlternatives = 1;
     const user_lang = navigator.language || navigator.userLanguage;
-    speech_recognition.lang = user_lang === 'ru' ? 'ru-RU' : 'en-US';
+    speech_recognition.lang = user_lang.startsWith('ru') ? 'ru-RU' : 'en-US';
 
     // MIME types and CODECS
     // const mime_type = 'audio/x-wav';

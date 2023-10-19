@@ -16,7 +16,9 @@ from app.services import commands # необходимо для запуска �
 from app.services.words import NOT_UNDERSTAND_ANSWERS
 from app.services.voices import get_audio_data_silero, get_audio_data_gtts
 from app.services.gpt import get_gpt_answer
-from app.services.models_load import vectorizers, regressions, classifier, vosk_models
+from app.services.models_load import (
+    vectorizers, regressions, classifiers, vosk_models
+)
 
 
 
@@ -83,18 +85,24 @@ def recognize_lang_from_audio_file(audio_file_obj: InMemoryUploadedFile) -> str:
     signal, sample_rate = torchaudio.load(bytes_io)
     print('sample_rate:', sample_rate)
 
-    out_prob, score, index, text_lab = classifier.classify_batch(signal)
-    print('text_lab:', text_lab)
+    for model_name, classifier in classifiers.items():
 
-    lang_name = text_lab[0].split(': ')[-1]
-    lang_code = lang_name[:2].lower()
-    print(f'Скорее всего это язык: {lang_name} с шансом: {score.exp()[0] :.0%}')
+        out_prob, score, index, text_lab = classifier.classify_batch(signal)
+        print('text_lab:', text_lab)
 
-    allowed_lang_codes = ['ru', 'en']
+        lang_name = text_lab[0].split(': ')[-1]
+        lang_code = lang_name[:2].lower()
+        exp = f'{score.exp()[0] :.0%}'
 
-    if lang_code not in allowed_lang_codes:
-        lang_code = 'ru'
-        print(f'Язык не попал в список разрешённых: {allowed_lang_codes}, изменяю язык на: {lang_code}')
+        print(f'Модель: {model_name} Скорее всего это язык: {lang_name} с шансом: {exp}')
+
+        allowed_lang_codes = ['ru', 'en']
+
+        if lang_code not in allowed_lang_codes:
+            lang_code = 'ru'
+            print(f'Язык: {lang_name} не попал в список разрешённых: {allowed_lang_codes}, изменяю язык на: {lang_code}')
+        else:
+            break
 
     return lang_code
 
