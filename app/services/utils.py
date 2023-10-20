@@ -7,6 +7,11 @@ from urllib.request import urlopen
 
 def download_and_unpack_zip_to_folder(
     url: str, unpack_to: str='', new_name_unpacked_folder: str=''):
+    """Загружает zip файл с удалённого сервера
+    и распаковывает его содержимое в необходимую директорию.\n
+    url - адресс zip файла,\n
+    unpack_to - директория для распаковки,\n
+    new_name_unpacked_folder - новое имя директории из архива."""
 
     folder_name_with_ext = url.rsplit('/', maxsplit=1)[-1]
     folder_name_without_ext = folder_name_with_ext.rsplit('.', maxsplit=1)[0]

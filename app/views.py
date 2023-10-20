@@ -14,8 +14,8 @@ class AiVoiceHelperView(TemplateView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        language = self.request.META.get('LANG')
-        lang_code = language.split('.')[0][:2] if language else 'ru'
+        language = self.request.META.get('HTTP_ACCEPT_LANGUAGE')
+        lang_code = language[:2] if language else 'ru'
 
         if lang_code == 'ru':
             context.update({'embedded_commands': RU_DATA_SET.keys()})
