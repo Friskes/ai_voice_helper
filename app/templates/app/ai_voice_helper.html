@@ -10,12 +10,14 @@
 
     <title>AI Helper</title>
 
+    <link rel="stylesheet" href="{% static 'app/styles/style.css' %}">
     <link rel="stylesheet" href="{% static 'app/styles/ask_btn.css' %}">
     <link rel="stylesheet" href="{% static 'app/styles/skip_btn.css' %}">
     <link rel="stylesheet" href="{% static 'app/styles/visualizer.css' %}">
     <link rel="stylesheet" href="{% static 'app/styles/loader_anim.css' %}">
     <link rel="stylesheet" href="{% static 'app/styles/input_text.css' %}">
     <link rel="stylesheet" href="{% static 'app/styles/commands.css' %}">
+    <link rel="stylesheet" href="{% static 'app/styles/gpt_code.css' %}">
   </head>
 
   <body>
@@ -27,6 +29,8 @@
         {{ forloop.counter }}) {{ command }}
       {% endfor %}
     </div>
+
+    <textarea class="gpt-code" readonly=""></textarea>
 
     <div class="visualizer-container"></div>
 

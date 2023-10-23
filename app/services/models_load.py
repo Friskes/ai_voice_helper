@@ -38,9 +38,11 @@ commonlanguage_classifier.hparams.label_encoder.ignore_len()
 
 classifiers = {'voxlingua107': voxlingua107_classifier, 'commonlanguage': commonlanguage_classifier}
 
-if os.environ.get('PERMANENT_USE_SMALL_MODEL'):
+if int(os.environ.get('PERMANENT_USE_SMALL_MODEL', '1')):
+    print('Используется vosk_small')
     vosk_models_path = 'app/static/app/models/vosk_small/'
 else:
+    print('Используется vosk_large, ожидайте загрузку модели..')
     vosk_models_path = 'app/static/app/models/vosk_large/'
 
 if not os.path.exists(vosk_models_path + 'ru/am') or not os.path.exists(vosk_models_path + 'en/am'):

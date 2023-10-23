@@ -61,6 +61,7 @@ const successCallback = (stream) => {
     const skip_button = document.querySelector('.cube-btn');
     const loader = document.querySelector('.loader-anim');
     const input_text = document.querySelector('.input-text');
+    const gpt_code_area = document.querySelector('.gpt-code');
 
     // https://developer.mozilla.org/ru/docs/Web/API/HTMLAudioElement/Audio
     const audio = new Audio();
@@ -85,6 +86,9 @@ const successCallback = (stream) => {
 
     ask_button.addEventListener('click', (event) => {
         // при клике по кнопке, скрываем кнопку и показываем визуализацию голоса
+
+        gpt_code_area.value = '';
+        gpt_code_area.style.display = 'none';
 
         set_timeout();
 
@@ -150,10 +154,13 @@ const successCallback = (stream) => {
             body: form_data,
             headers: headers
         })
-        .then(response => response.blob()).then((voice_blob) => {
-            // console.log('GET DATA FROM SERVER', voice_blob);
+        .then(response => response.json()).then((json_response) => {
+            // console.log('GET DATA FROM SERVER', json_response);
 
-            const blob_url = window.URL.createObjectURL(voice_blob);
+            gpt_code_area.value = json_response.gpt_code;
+            if (json_response.gpt_code !== '') gpt_code_area.style.display = 'block';
+
+            const blob_url = `data:${mime_type};base64,${json_response.audio_data}`;
 
             loader.style.display = 'none';
             skip_button.style.display = 'block';

@@ -33,14 +33,14 @@ def predict_probability_belong_embedded_cmd(request_text: str, lang_code: str) -
     # Предсказание вероятностей принадлежности к каждой команде
     predicted_probabilities = regressions[lang_code].predict_proba(user_command_vector)
 
-    # Поиск наибольшей вероятности
-    max_probability = max(predicted_probabilities[0])
-    print('max_probability:', max_probability)
-
-    data_set_val = regressions[lang_code].classes_[predicted_probabilities[0].argmax()]
-
     # Коэффициент порога совпадения (необходимо подстраивать под наполнение дата сета)
     threshold = 0.53
+
+    # Поиск наибольшей вероятности
+    max_probability = max(predicted_probabilities[0])
+    print('\nпорог:', threshold, 'вероятность:', max_probability)
+
+    data_set_val = regressions[lang_code].classes_[predicted_probabilities[0].argmax()]
 
     # возвращает значение дата сета, если значение вероятности
     # больше значения порогового коэффициента, иначе возвращает None
@@ -48,10 +48,10 @@ def predict_probability_belong_embedded_cmd(request_text: str, lang_code: str) -
 
 
 
-def branching_logic(request_text: str, lang_code: str) -> bytes:
+def branching_logic(request_text: str, lang_code: str) -> tuple[bytes, str]:
     """Ветвление логики на запрос к GPT либо выполнение встроенных команд"""
 
-    # print('request_text:', request_text)
+    print(f'\n{"—"*25}Текст запроса{"—"*25}\n{request_text}\n{"—"*25}Текст запроса{"—"*25}')
     if not request_text:
         return get_audio_data_gtts(random.choice(NOT_UNDERSTAND_ANSWERS[lang_code]))
 
@@ -63,14 +63,14 @@ def branching_logic(request_text: str, lang_code: str) -> bytes:
         return get_audio_data_gtts(
             gpt_answer if gpt_answer else random.choice(NOT_UNDERSTAND_ANSWERS[lang_code]),
             lang_code
-        )
+        ), gpt_code
 
     # получение имени функции и сообщения из значения дата сета
     func_name, answer_phrase = data_set_val.split(maxsplit=1)
 
     # запуск функции из файла commands
     exec(f'commands.{func_name}("{request_text}", "{lang_code}", "{answer_phrase}")')
-    return get_audio_data_silero(answer_phrase, lang_code)
+    return get_audio_data_silero(answer_phrase, lang_code), ''
 
 
 
@@ -83,12 +83,12 @@ def recognize_lang_from_audio_file(audio_file_obj: InMemoryUploadedFile) -> str:
     wavfile.write(bytes_io, 16000, numpy_arr)
 
     signal, sample_rate = torchaudio.load(bytes_io)
-    print('sample_rate:', sample_rate)
+    # print('sample_rate:', sample_rate)
 
     for model_name, classifier in classifiers.items():
 
         out_prob, score, index, text_lab = classifier.classify_batch(signal)
-        print('text_lab:', text_lab)
+        # print('text_lab:', text_lab)
 
         lang_name = text_lab[0].split(': ')[-1]
         lang_code = lang_name[:2].lower()
@@ -108,11 +108,11 @@ def recognize_lang_from_audio_file(audio_file_obj: InMemoryUploadedFile) -> str:
 
 
 
-def recognize_text_from_audio_file(audio_file_obj: InMemoryUploadedFile) -> bytes:
+def recognize_text_from_audio_file(audio_file_obj: InMemoryUploadedFile) -> tuple[bytes, str]:
     """Распознование речи для преобразования в текст"""
 
     # https://github.com/alphacep/vosk-api/blob/master/python/example/test_alternatives.py
-    wave_audio_file_obj = wave.open(audio_file_obj, 'rb')
+    wave_audio_file_obj: wave.Wave_read = wave.open(audio_file_obj, 'rb')
 
     if ( wave_audio_file_obj.getnchannels() != 1 
     or wave_audio_file_obj.getsampwidth() != 2 
@@ -120,9 +120,13 @@ def recognize_text_from_audio_file(audio_file_obj: InMemoryUploadedFile) -> byte
         print('Audio file must be WAV format mono PCM.')
         return get_audio_data_silero('Аудио файл должен иметь вейв формат моно писиэм')
 
-    audio_file_obj.seek(0)
+    if isinstance(audio_file_obj, InMemoryUploadedFile):
+        audio_file_obj.seek(0)
+
     lang_code = recognize_lang_from_audio_file(audio_file_obj)
-    audio_file_obj.seek(0)
+
+    if isinstance(audio_file_obj, InMemoryUploadedFile):
+        audio_file_obj.seek(0)
 
     recognizer = KaldiRecognizer(
         vosk_models[lang_code],

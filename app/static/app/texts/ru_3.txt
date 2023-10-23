@@ -1,0 +1,79 @@
+Вот несколько примеров кода на Python, которые демонстрируют различные аспекты языка:
+
+1. Проверка дубликатов в списке:
+
+```python
+def check_duplicate(lst):
+    return len(lst) != len(set(lst))
+
+print(check_duplicate([1,2,3,4,5,4,6]))  # True
+print(check_duplicate([1,2,3]))  # False
+print(check_duplicate([1,2,3,4,9]))  # False
+```
+[Source 0](https://habr.com/ru/companies/vdsina/articles/563432/)
+
+2. Фильтрация значений False из списка:
+
+```python
+def Filtering(lst):
+    return list(filter(None,lst))
+
+lst=[None,1,3,0,"",5,7]
+print(Filtering(lst))  # [1, 3, 5, 7]
+```
+[Source 0](https://habr.com/ru/companies/vdsina/articles/563432/)
+
+3. Получение размера строки в байтах:
+
+```python
+def ByteSize(string):
+    return len(string.encode("utf8"))
+
+print(ByteSize("Python"))  # 6
+print(ByteSize("Data"))  # 4
+```
+[Source 0](https://habr.com/ru/companies/vdsina/articles/563432/)
+
+4. Сортировка словаря:
+
+```python
+orders = {
+ 'pizza': 200,
+ 'burger': 56,
+ 'pepsi': 25,
+ 'Coffee': 14
+}
+
+sorted_dic= sorted(orders.items(), key=lambda x: x[1])
+print(sorted_dic)  # [('Coffee', 14), ('pepsi', 25), ('burger', 56), ('pizza', 200)]
+```
+[Source 0](https://habr.com/ru/companies/vdsina/articles/563432/)
+
+5. Получение последнего элемента списка:
+
+```python
+my_list = ["Python", "JavaScript", "C++", "Java", "C#", "Dart"]
+print(my_list[-1])  # Dart
+```
+[Source 0](https://habr.com/ru/companies/vdsina/articles/563432/)
+
+6. Преобразование разделённого запятыми списка в строку:
+
+```python
+my_list1=["Python","JavaScript","C++"]
+my_list2=["Java", "Flutter", "Swift"]
+print(", ".join(my_list1))  # Python, JavaScript, C++
+print(", ".join(my_list2))  # Java, Flutter, Swift
+```
+[Source 0](https://habr.com/ru/companies/vdsina/articles/563432/)
+
+7. Перемешивание списка:
+
+```python
+from random import shuffle
+my_list1=[1,2,3,4,5,6]
+my_list2=["A","B","C","D"]
+shuffle(my_list1)  # [4, 6, 1, 3, 2, 5]
+shuffle(my_list2)  # ['A', 'D', 'B', 'C']
+```
+[Source 0](https://habr.com/ru/companies/vdsina/articles/563432/)
