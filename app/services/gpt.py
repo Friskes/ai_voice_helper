@@ -56,9 +56,9 @@ def check_answer(answer: str) -> tuple[str, str]:
 
         for i, part in enumerate(parts, 1):
             if i % 2 == 0:
-                code += f'{part}      \n'
+                code += f'{part}\n'
             else:
-                text += f'{part}      \n'
+                text += f'{part}\n'
 
         answer = text
 
