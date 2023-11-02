@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 from string import punctuation
 import re
 from urllib.parse import urlparse, unquote
@@ -7,7 +8,6 @@ from urllib.parse import urlparse, unquote
 import g4f
 g4f.logging = True # Отобразить какой провайдер используется
 g4f.check_version = False # Отключить проверку версии при импорте
-
 
 
 sym_replace_table = {
@@ -35,12 +35,10 @@ sym_replace_table = {
 trans_table = str.maketrans(sym_replace_table)
 
 
-
 def clear_text(answer: str) -> str:
     """Матрица замены символов в тексте для корректной озвучки"""
 
     return answer.translate(trans_table)
-
 
 
 def check_answer(answer: str) -> tuple[str, str]:
@@ -64,7 +62,6 @@ def check_answer(answer: str) -> tuple[str, str]:
 
     text = clear_text(answer)
     return text, code
-
 
 
 def transform_links_from_text(text: str) -> str:
@@ -96,7 +93,6 @@ def transform_links_from_text(text: str) -> str:
     text = ' '.join(words)
 
     return text
-
 
 
 def get_gpt_answer(request_text: str) -> tuple[str, str]:

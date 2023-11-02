@@ -20,7 +20,6 @@ from app.services.words import RU_DATA_SET, EN_DATA_SET
 from app.services.utils import download_and_unpack_zip_to_folder
 
 
-
 # https://huggingface.co/speechbrain/lang-id-voxlingua107-ecapa
 # https://bark.phon.ioc.ee/voxlingua107/
 voxlingua107_classifier = EncoderClassifier.from_hparams(
@@ -83,7 +82,6 @@ en_regression.fit(en_vectors, list(EN_DATA_SET.values()))
 
 vectorizers = {'ru': ru_vectorizer, 'en': en_vectorizer}
 regressions = {'ru': ru_regression, 'en': en_regression}
-
 
 
 silero_models_path = 'app/static/app/models/silero_models/'

@@ -8,7 +8,6 @@ from IPython.display import Audio
 from app.services.models_load import silero_models, speakers
 
 
-
 def get_audio_data_silero(text: str, lang_code: str='ru') -> bytes:
     """Озвучка текста моделью silero\n
     Может работать только с одним языком одиновременно (не поддерживает смешивание)"""
@@ -23,7 +22,6 @@ def get_audio_data_silero(text: str, lang_code: str='ru') -> bytes:
     file.filename = 'ai_voice_helper.wav'
 
     return file.data
-
 
 
 def get_audio_data_gtts(text: str, lang_code: str='ru') -> bytes:

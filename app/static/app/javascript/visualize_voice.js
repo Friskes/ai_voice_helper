@@ -26,7 +26,7 @@ const init_visualizer = () => {
 
     const lines = document.getElementsByClassName('visual-line');
 
-    navigator.mediaDevices.getUserMedia({audio: true}).then(stream => {
+    navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
 
         visualizer_audio_context.createMediaStreamSource(stream).connect(analyser);
 

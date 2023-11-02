@@ -3,7 +3,6 @@ from django.test import TestCase
 from app.services.gpt import transform_links_from_text, check_answer
 
 
-
 # python manage.py test app.tests.test_processing_gpt_answer.TestProcessingGptAnswer
 class TestProcessingGptAnswer(TestCase):
 

@@ -9,7 +9,6 @@ import soundfile
 import sounddevice
 
 
-
 # python manage.py test app.tests.test_views.TestAssistantView
 class TestAssistantView(TestCase):
 

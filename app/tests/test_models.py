@@ -9,7 +9,6 @@ import torchaudio
 from speechbrain.pretrained import EncoderClassifier
 
 
-
 # python manage.py test app.tests.test_models.TestCorrectnessClassifierModels
 class TestCorrectnessClassifierModels(TestCase):
 

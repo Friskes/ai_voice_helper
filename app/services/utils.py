@@ -4,7 +4,6 @@ from zipfile import ZipFile
 from urllib.request import urlopen
 
 
-
 def download_and_unpack_zip_to_folder(
     url: str, unpack_to: str='', new_name_unpacked_folder: str=''):
     """Загружает zip файл с удалённого сервера
@@ -48,5 +47,5 @@ def download_and_unpack_zip_to_folder(
 
         file.extractall(unpack_to)
 
-    print(f'Успешно завершена загрузка и распаковка архива: {folder_name_with_ext} \
-в директорию: {unpack_to + new_name_unpacked_folder}')
+    print(f'Успешно завершена загрузка и распаковка архива: {folder_name_with_ext} '
+          'в директорию: {unpack_to + new_name_unpacked_folder}')

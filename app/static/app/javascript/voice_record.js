@@ -73,7 +73,7 @@ const successCallback = (stream) => {
     let timeout_id;
 
 
-    const set_timeout = (timeout=3000) => {
+    const set_timeout = (timeout = 3000) => {
         if (timeout_id) clearTimeout(timeout_id);
 
         timeout_id = setTimeout(() => {
@@ -154,20 +154,20 @@ const successCallback = (stream) => {
             body: form_data,
             headers: headers
         })
-        .then(response => response.json()).then((json_response) => {
-            // console.log('GET DATA FROM SERVER', json_response);
+            .then(response => response.json()).then((json_response) => {
+                // console.log('GET DATA FROM SERVER', json_response);
 
-            gpt_code_area.value = json_response.gpt_code;
-            if (json_response.gpt_code !== '') gpt_code_area.style.display = 'block';
+                gpt_code_area.value = json_response.gpt_code;
+                if (json_response.gpt_code !== '') gpt_code_area.style.display = 'block';
 
-            const blob_url = `data:${mime_type};base64,${json_response.audio_data}`;
+                const blob_url = `data:${mime_type};base64,${json_response.audio_data}`;
 
-            loader.style.display = 'none';
-            skip_button.style.display = 'block';
+                loader.style.display = 'none';
+                skip_button.style.display = 'block';
 
-            audio.src = blob_url;
-            audio.play().catch(error => { console.error('audio play error:', JSON.stringify(error)); });
-        });
+                audio.src = blob_url;
+                audio.play().catch(error => { console.error('audio play error:', JSON.stringify(error)); });
+            });
     };
 
 

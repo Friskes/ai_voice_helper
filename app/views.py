@@ -1,9 +1,9 @@
+from base64 import b64encode
+
 from django.views.generic import TemplateView
 from django.http import JsonResponse
 from django.core.handlers.asgi import ASGIRequest
 from django.core.files.uploadedfile import InMemoryUploadedFile
-
-from base64 import b64encode
 
 from app.services.recognition import recognize_text_from_audio_file
 from app.services.words import RU_DATA_SET, EN_DATA_SET

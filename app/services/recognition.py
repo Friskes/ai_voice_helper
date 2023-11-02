@@ -21,7 +21,6 @@ from app.services.models_load import (
 )
 
 
-
 def predict_probability_belong_embedded_cmd(request_text: str, lang_code: str) -> str | None:
     """Анализ распознанной речи для определения
     принадлежности запроса к встроенным командам"""
@@ -47,7 +46,6 @@ def predict_probability_belong_embedded_cmd(request_text: str, lang_code: str) -
     return data_set_val if max_probability >= threshold else None
 
 
-
 def branching_logic(request_text: str, lang_code: str) -> tuple[bytes, str]:
     """Ветвление логики на запрос к GPT либо выполнение встроенных команд"""
 
@@ -71,7 +69,6 @@ def branching_logic(request_text: str, lang_code: str) -> tuple[bytes, str]:
     # запуск функции из файла commands
     exec(f'commands.{func_name}("{request_text}", "{lang_code}", "{answer_phrase}")')
     return get_audio_data_silero(answer_phrase, lang_code), ''
-
 
 
 def recognize_lang_from_audio_file(audio_file_obj: InMemoryUploadedFile) -> str:
@@ -105,7 +102,6 @@ def recognize_lang_from_audio_file(audio_file_obj: InMemoryUploadedFile) -> str:
             break
 
     return lang_code
-
 
 
 def recognize_text_from_audio_file(audio_file_obj: InMemoryUploadedFile) -> tuple[bytes, str]:
